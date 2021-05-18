@@ -11,8 +11,10 @@ namespace WinFormHtmlEditor
 {
     public partial class TinyMCE : UserControl
     {
-        public TinyMCE()
+        private string TinyMCEPath;
+        public TinyMCE(string tinyMCEPath = null)
         {
+            TinyMCEPath = tinyMCEPath;
             InitializeComponent();
         }
 
@@ -58,9 +60,13 @@ namespace WinFormHtmlEditor
             webBrowserControl.ScriptErrorsSuppressed = true;
 
             // Check if the main script used by the HTML page exists
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"tinymce\js\tinymce\tinymce.min.js")))
+            if (string.IsNullOrEmpty(TinyMCEPath))
             {
-                webBrowserControl.Url = new Uri(@"file:///" + Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"tinymce/tinymce.htm").Replace('\\', '/'));
+                TinyMCEPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"tinymce\");
+            }
+            if (File.Exists(Path.Combine(TinyMCEPath, @"js\tinymce\tinymce.min.js")))
+            {
+                webBrowserControl.Url = new Uri(@"file:///" + Path.Combine(TinyMCEPath, @"tinymce.htm").Replace('\\', '/'));
             }
             else
             {
